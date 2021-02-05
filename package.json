@@ -4,11 +4,8 @@
   "description": "An introduction to developing Node.js apps on the IBM Cloud platform",
   "version": "0.1.1",
   "private": false,
-  "engines": {
-    "node": "10.*"
-  },
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git"
@@ -25,7 +22,9 @@
     "ibmiotf": "^0.2.41",
     "logger": "^0.0.1",
     "mongodb": "^3.1.13",
-    "morgan": "^1.10.0"
+    "mongoose": "^5.11.14",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7"
   },
   "author": "IBM Corp",
   "license": "Apache-2.0"
