@@ -1,21 +1,25 @@
 const mongoose = require('mongoose');
+const { SensorDataSchema } = require('./sensorData');
 const { Schema } = mongoose;
 
-const MinuteSchema = new Schema({
-  deviceId: { type: String, required: true, trim: true },
-  date: { type: Date, required: true },
-  data: [
-    {
-      humidity: { type: Number },
-      temperature: { type: Number },
-      now: { type: Date },
+const MinuteSchema = new Schema(
+  {
+    deviceId: { type: String, required: true, trim: true },
+    data: [
+      {
+        type: SensorDataSchema,
+        default: () => ({}),
+      },
+    ],
+    instanceData: {
+      type: SensorDataSchema,
+      default: () => ({}),
     },
-  ],
-  instanceData: {
-    humidity: { type: Number },
-    temperature: { type: Number },
   },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const Minute = mongoose.model('Minute', MinuteSchema);
 

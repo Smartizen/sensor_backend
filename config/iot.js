@@ -1,5 +1,5 @@
 var Client = require('ibmiotf');
-const { addDataByMinute } = require('../helper/data_helper');
+const { addDataByHour } = require('../helper/data_helper');
 require('dotenv').config();
 
 const connectIoTF = () => {
@@ -36,7 +36,7 @@ const connectIoTF = () => {
     payload.deviceId = deviceId;
 
     //insert to database
-    addDataByMinute(payload);
+    addDataByHour(payload);
   });
 };
 
