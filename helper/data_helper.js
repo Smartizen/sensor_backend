@@ -3,7 +3,7 @@ const { Hour } = require('../models/hour');
 const { SensorData } = require('../models/sensorData');
 
 const addDataByHour = async (data) => {
-  let { deviceId, humidity, temperature } = data;
+  let { deviceType, deviceId, humidity, temperature } = data;
   let now = new Date();
 
   let sensorData = new SensorData({
@@ -22,6 +22,7 @@ const addDataByHour = async (data) => {
     });
 
     let hour = new Hour({
+      deviceType,
       deviceId,
       data: [minute],
       instanceData: sensorData,

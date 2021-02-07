@@ -6,6 +6,11 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var app = express();
 var port = process.env.PORT || 5000;
+
+var manageDevice = require('./routes/manageDevice');
+var orgAdminstraion = require('./routes/orgAdminstration');
+var dbInfo = require('./routes/dbinfo');
+
 const { connectIoTF } = require('./config/iot');
 
 var configDB = require('./config/database.js');
@@ -48,4 +53,11 @@ app.use(
 
 connectIoTF();
 
+// routes ======================================================================
+
+app.use('/device', manageDevice);
+app.use('/admin', orgAdminstraion);
+app.use('/db', dbInfo);
+
+// launch ======================================================================
 app.listen(port);
