@@ -20,31 +20,32 @@ const connectIoTF = () => {
     //Add your code here
   });
 
-  appClient.on('deviceEvent', function (deviceType, deviceId, eventType, format, payload) {
-    console.log(
-      'Device Event from :: ' +
-        deviceType +
-        ' : ' +
-        deviceId +
-        ' of event ' +
-        eventType +
-        ' with payload : ' +
-        payload
-    );
-    payload = '' + payload;
-    payload = JSON.parse(payload);
-    payload.deviceType = deviceType;
-    payload.deviceId = deviceId;
+  // appClient.on('deviceEvent', function (deviceType, deviceId, eventType, format, payload) {
+  //   console.log(
+  //     'Device Event from :: ' +
+  //       deviceType +
+  //       ' : ' +
+  //       deviceId +
+  //       ' of event ' +
+  //       eventType +
+  //       ' with payload : ' +
+  //       payload
+  //   );
+  //   payload = '' + payload;
+  //   payload = JSON.parse(payload);
+  //   payload.deviceType = deviceType;
+  //   payload.deviceId = deviceId;
 
-    //insert to database
-    addDataByHour(payload);
-  });
+  //   //insert to database
+  //   addDataByHour(payload);
+  // });
 };
 
 const registerDeviceType = async (typeId, description) => {
   try {
     let argument = await appClient.registerDeviceType(typeId, description); //{id, description}
     return {
+      status: 200,
       typeId: argument.id,
     };
   } catch (error) {
@@ -56,11 +57,8 @@ const registerDeviceType = async (typeId, description) => {
 const registerDevice = async (typeId, deviceId) => {
   try {
     let argument = await appClient.registerDevice(typeId, deviceId);
-    return {
-      typeId: argument.typeId,
-      deviceId: argument.deviceId,
-      authToken: argument.authToken,
-    };
+    argument.status = 200;
+    return argument;
   } catch (error) {
     console.log(error);
     return error;
@@ -79,7 +77,19 @@ const unRegisterDevice = async (typeId, deviceId) => {
 
 const getDeviceStatus = () => {};
 
-const publicEvent = () => {};
+const publicEvent = async ({ typeId, deviceId, channel, command }) => {
+  // {
+  //   "typeId":"ESP8266",
+  //   "deviceId":"test3",
+  //   "channel":"control",
+  //   "command":{"control":0}
+  // }
+
+  command = JSON.stringify(command);
+  let res = await appClient.publishDeviceCommand(typeId, deviceId, channel, 'json', command);
+  console.log(JSON.stringify(res._events));
+  return 1;
+};
 
 const setIntervalForDevice = () => {};
 
