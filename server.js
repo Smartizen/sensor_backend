@@ -10,6 +10,7 @@ var port = process.env.PORT || 5000;
 var manageDevice = require('./routes/manageDevice');
 var orgAdminstraion = require('./routes/orgAdminstration');
 var dbInfo = require('./routes/dbinfo');
+var devideData = require('./routes/devideData');
 
 const { connectIoTF } = require('./config/iot');
 
@@ -57,6 +58,7 @@ connectIoTF();
 
 app.use('/device', manageDevice);
 app.use('/admin', orgAdminstraion);
+app.use('/data', devideData);
 app.use('/db', dbInfo);
 
 // launch ======================================================================

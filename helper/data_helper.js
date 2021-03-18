@@ -4,17 +4,17 @@ const { SensorData } = require('../models/sensorData');
 
 const addDataByHour = async (data) => {
   let { deviceType, deviceId, humidity, temperature } = data;
-  let now = new Date();
+  let now = new Date().getTime();
 
   let sensorData = new SensorData({
     humidity,
     temperature,
-    createdAt: new Date(),
+    createdAt: new Date().getTime(),
   });
 
   lastData = await Hour.findOne({ deviceId }).sort({ createdAt: '-1' });
 
-  if (!lastData || now.getHours() !== lastData.createdAt.getHours()) {
+  if (!lastData || new Date(now).getHours() !== new Date(lastData.createdAt).getHours()) {
     let minute = new Minute({
       deviceId,
       data: [sensorData],
@@ -26,11 +26,14 @@ const addDataByHour = async (data) => {
       deviceId,
       data: [minute],
       instanceData: sensorData,
+      createdAt: now,
     });
 
     await hour.save();
   } else {
-    if (now.getMinutes() !== lastData.data.slice(-1)[0].createdAt.getMinutes()) {
+    if (
+      new Date(now).getMinutes() !== new Date(lastData.data.slice(-1)[0].createdAt).getMinutes()
+    ) {
       let minute = new Minute({
         deviceId,
         data: [sensorData],

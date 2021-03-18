@@ -20,25 +20,25 @@ const connectIoTF = () => {
     //Add your code here
   });
 
-  // appClient.on('deviceEvent', function (deviceType, deviceId, eventType, format, payload) {
-  //   console.log(
-  //     'Device Event from :: ' +
-  //       deviceType +
-  //       ' : ' +
-  //       deviceId +
-  //       ' of event ' +
-  //       eventType +
-  //       ' with payload : ' +
-  //       payload
-  //   );
-  //   payload = '' + payload;
-  //   payload = JSON.parse(payload);
-  //   payload.deviceType = deviceType;
-  //   payload.deviceId = deviceId;
+  appClient.on('deviceEvent', function (deviceType, deviceId, eventType, format, payload) {
+    console.log(
+      'Device Event from :: ' +
+        deviceType +
+        ' : ' +
+        deviceId +
+        ' of event ' +
+        eventType +
+        ' with payload : ' +
+        payload
+    );
+    payload = '' + payload;
+    payload = JSON.parse(payload);
+    payload.deviceType = deviceType;
+    payload.deviceId = deviceId;
 
-  //   //insert to database
-  //   addDataByHour(payload);
-  // });
+    //insert to database
+    addDataByHour(payload);
+  });
 };
 
 const registerDeviceType = async (typeId, description) => {
