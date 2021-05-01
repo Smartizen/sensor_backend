@@ -6,6 +6,8 @@ const { Schema } = mongoose;
 const HourSchema = new Schema({
   deviceType: { type: String, required: true, trim: true },
   deviceId: { type: String, required: true, trim: true },
+  switch1: { type: Number },
+  switch2: { type: Number },
   data: [
     {
       type: MinuteSchema,

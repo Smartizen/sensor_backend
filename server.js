@@ -4,17 +4,20 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+
 var app = express();
 var port = process.env.PORT || 5000;
 
 var manageDevice = require('./routes/manageDevice');
 var orgAdminstraion = require('./routes/orgAdminstration');
-var dbInfo = require('./routes/dbinfo');
 var devideData = require('./routes/devideData');
 
 const { connectIoTF } = require('./config/iot');
 
 var configDB = require('./config/database.js');
+
+var socketio = require('socket.io');
+var WebSockets = require('./utils/WebSockets.js');
 
 // configuration ===============================================================
 const connectDB = async () => {
@@ -59,7 +62,10 @@ connectIoTF();
 app.use('/device', manageDevice);
 app.use('/admin', orgAdminstraion);
 app.use('/data', devideData);
-app.use('/db', dbInfo);
 
 // launch ======================================================================
-app.listen(port);
+var server = app.listen(port);
+
+// Socket ======================================================================
+global.io = socketio.listen(server);
+global.io.on('connection', WebSockets.connection);
