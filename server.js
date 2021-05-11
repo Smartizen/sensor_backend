@@ -11,6 +11,7 @@ var port = process.env.PORT || 5000;
 var manageDevice = require('./routes/manageDevice');
 var orgAdminstraion = require('./routes/orgAdminstration');
 var devideData = require('./routes/devideData');
+var proxy = require('./routes/proxy');
 
 const { connectIoTF } = require('./config/iot');
 
@@ -62,6 +63,7 @@ connectIoTF();
 app.use('/device', manageDevice);
 app.use('/admin', orgAdminstraion);
 app.use('/data', devideData);
+app.use('/proxy', proxy);
 
 // launch ======================================================================
 var server = app.listen(port);

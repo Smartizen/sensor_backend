@@ -36,6 +36,7 @@ const connectIoTF = () => {
     payload.deviceType = deviceType;
     payload.deviceId = deviceId;
 
+    // public event
     global.io.sockets.emit(payload.deviceId, { message: payload });
     //insert to database
     // addDataByHour(payload);
