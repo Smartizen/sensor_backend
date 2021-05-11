@@ -28,6 +28,7 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     },
     (error) => {
       if (error) console.log('error :', error);
