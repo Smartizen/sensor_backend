@@ -7,7 +7,7 @@ const DeviceTypeSchema = new Schema(
   {
     typeId: { type: String, unique: true, required: true, trim: true },
     description: { type: String, trim: true },
-    devices: [{ type: DeviceSchema, required: false }],
+    devices: [{ type: Schema.Types.ObjectId, ref: 'Device' }],
   },
   {
     timestamps: true,

@@ -54,20 +54,17 @@ router.post('/registerDevice/smartizen', async (req, res) => {
   let { typeId, deviceId, host } = req.body;
 
   let authToken = generateUUID();
-
+  //TODO what happen when have 2 device same name
   let newDevice = new Device({
     deviceId,
     host,
     authToken,
   });
 
+  let device = await newDevice.save();
+
   try {
-    let updatedDevice = await DeviceType.findOneAndUpdate(
-      { typeId, 'devices.deviceId': { $ne: deviceId } },
-      {
-        $addToSet: { devices: newDevice },
-      }
-    );
+    let updatedDevice = await DeviceType.updateOne({ typeId }, { $push: { devices: device._id } });
     if (updatedDevice) res.json({ typeId, deviceId, authToken });
     else res.status(400).json({ error: "can't update" });
   } catch (error) {
@@ -83,13 +80,23 @@ router.post('/registerDevice/smartizen', async (req, res) => {
 router.post('/unRegisterDevice/smartizen', async (req, res) => {
   let { typeId, deviceId } = req.body;
   try {
-    let updatedDevice = await DeviceType.findOneAndUpdate(
-      { typeId },
-      {
-        $pull: { devices: { deviceId: deviceId } },
-      }
-    );
-    res.json({ message: 'delete successfully' });
+    let device = await DeviceType.findOne({ typeId }).populate({
+      path: 'devices',
+      match: { deviceId },
+    });
+
+    if (!!device) {
+      await Device.remove({ deviceId });
+      await DeviceType.findOneAndUpdate(
+        { typeId },
+        {
+          $pull: { devices: device.devices[0]._id },
+        }
+      );
+      res.json({ message: 'remove successfully !' });
+    } else {
+      res.json({ message: 'device does not exist' });
+    }
   } catch (error) {
     res.status(400).json({ error });
   }
