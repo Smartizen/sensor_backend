@@ -8,14 +8,14 @@ const router = require('express').Router();
 /// IBM IOT WATSON
 //////////////////
 
-router.post('/registerDeviceType/IBMWatson', async (req, res) => {
+router.post('/registerDeviceType/watson', async (req, res) => {
   let { typeId, description } = req.body;
 
   let message = await registerDeviceType(typeId, description);
   res.json(message);
 });
 
-router.post('/registerDevice/IBMWatson', async (req, res) => {
+router.post('/registerDevice/watson', async (req, res) => {
   let { typeId, deviceId } = req.body;
   let message = await registerDevice(typeId, deviceId);
   res.json('message');
@@ -25,7 +25,7 @@ router.post('/registerDevice/IBMWatson', async (req, res) => {
   //         "authToken": "bcP3*bgo*pb3f4AmUO",
 });
 
-router.post('/unRegisterDevice/IBMWatson', async (req, res) => {
+router.post('/unRegisterDevice/watson', async (req, res) => {
   let { typeId, deviceId } = req.body;
   let message = await unRegisterDevice(typeId, deviceId);
   if (!!(message.status === 404)) return res.status(404).json(message);
@@ -89,8 +89,7 @@ router.post('/unRegisterDevice/smartizen', async (req, res) => {
         $pull: { devices: { deviceId: deviceId } },
       }
     );
-    console.log({ updatedDevice });
-    res.json({ typeId, deviceId, authToken });
+    res.json({ message: 'delete successfully' });
   } catch (error) {
     res.status(400).json({ error });
   }
