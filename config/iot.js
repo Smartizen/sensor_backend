@@ -1,5 +1,6 @@
 var Client = require('ibmiotf');
 const { addDataByHour } = require('../helper/data_helper');
+const { default: axios } = require('axios');
 require('dotenv').config();
 
 var appClientConfig = {
@@ -38,8 +39,16 @@ const connectIoTF = () => {
 
     // public event
     global.io.sockets.emit(payload.deviceId, { message: payload });
+    // send notification
+    if (payload.temperature >= 50) {
+      axios.post(`${process.env.USER_SERVICE}/messaging/send-message`, {
+        deviceId,
+        title: 'Cảnh báo bất thường',
+        body: 'Nhiệt độ phòng đang lớn hơn 50 độ',
+      });
+    }
     //insert to database
-    // addDataByHour(payload);
+    addDataByHour(payload);
   });
 };
 
