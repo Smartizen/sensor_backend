@@ -61,6 +61,9 @@ connectIoTF();
 
 // routes ======================================================================
 
+app.get('/', function (req, res) {
+  res.send('IoT service');
+});
 app.use('/device', manageDevice);
 app.use('/admin', orgAdminstraion);
 app.use('/data', devideData);
